@@ -1,6 +1,17 @@
-z9auth:
+notifications:
+  container_name: notifications
   build: .
-  links:
-   - mongo
-mongo:
-  image: mongo
+  environment:
+   - FROM=
+   - SMTP_LOGIN=
+   - SMTP_PASSWORD=
+   - SMTP_HOST=
+   - SMTP_PORT=
+
+   - SMS_SENDER=
+   - SMSC_LOGIN=
+   - SMSC_PASSWORD=
+   - SMSC_POST=1
+   - SMSC_HTTPS=1
+   - SMSC_CHARSET=utf-8
+   - SMSC_DEBUG=0
