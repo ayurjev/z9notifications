@@ -70,7 +70,10 @@ class NotificationService(object):
         :param text:
         :return:
         """
-        text = "%s\n%s" % (os.environ.get(""), text)
+        if os.environ.get("SMS_BEFORE"):
+            text = "{before}\n{text}".format(before=os.environ.get("SMS_BEFORE"), text=text)
+        if os.environ.get("SMS_AFTER"):
+            text = "{text}\n{after}".format(after=os.environ.get("SMS_AFTER"), text=text)
         r = SMSC().send_sms(
             normalize_phone_number(phone).replace("+", ""),
             text,
