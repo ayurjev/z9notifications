@@ -70,8 +70,13 @@ class NotificationService(object):
         :param text:
         :return:
         """
-        text = "%s\n%s" % (os.environ.get("SMS_SENDER"), text)
-        r = SMSC().send_sms(normalize_phone_number(phone).replace("+", ""), text, os.environ.get("SMS_SENDER"))
+        text = "%s\n%s" % (os.environ.get(""), text)
+        r = SMSC().send_sms(
+            normalize_phone_number(phone).replace("+", ""),
+            text,
+            translit=os.environ.get("SMS_TRANSLIT", 0),
+            sender=os.environ.get("SMS_SENDER", False)
+        )
         if not r:
             raise SmsError
         return True
