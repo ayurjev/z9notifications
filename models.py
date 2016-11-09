@@ -59,7 +59,9 @@ class NotificationService(object):
                 payload, os.environ.get("FROM"), rcpt_to, os.environ.get("SMTP_HOST"), os.environ.get("SMTP_PORT"), 'ssl',
                 smtp_login=os.environ.get("SMTP_LOGIN"), smtp_password=os.environ.get("SMTP_PASSWORD")
             )
-            return bool(result)
+            if isinstance(result, str):
+                raise EmailError(result)
+            return True if result == {} else False
         except Exception as err:
             raise EmailError(str(err))
 

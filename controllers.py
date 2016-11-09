@@ -36,8 +36,14 @@ class Controller(BaseController):
         :param kwargs:
         :return:
         """
+        as_json = request.get("as_json", False)
         html = base64.b64decode(request.get("base64").replace(" ", "+").encode()).decode()
-        return service.send_email(request.get("address"), request.get("subject"), html)
+        attachments = [
+            {"bytes": base64.b64decode(a.get("base64").replace(" ", "+").encode()), "name": a.get("name")}
+            for a in request.get("attachments", [])
+        ]
+        result = service.send_email(request.get("address"), request.get("subject"), html, attachments=attachments)
+        return result if not as_json else {"result": result}
 
     @classmethod
     @response_format
@@ -47,4 +53,6 @@ class Controller(BaseController):
         :param kwargs:
         :return:
         """
-        return service.send_sms(request.get("address"), request.get("text"))
+        as_json = request.get("as_json", False)
+        result = service.send_sms(request.get("address"), request.get("text"))
+        return result if not as_json else {"result": result}
